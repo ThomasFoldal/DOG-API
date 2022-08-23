@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace DOG_API
 {
@@ -23,6 +26,7 @@ namespace DOG_API
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }
