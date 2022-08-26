@@ -60,7 +60,7 @@ namespace DOG_API
                 List_Data? data = JsonConvert.DeserializeObject<List_Data>(result);
                 try
                 {
-                    breed_CB.ItemsSource = data!.Message;
+                    //breed_CB.ItemsSource = data!.Message.Name;
                 }
                 catch (Exception)
                 {

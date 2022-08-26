@@ -8,7 +8,11 @@ namespace DOG_API
 {
     internal class List_Data
     {
-        public List<string> Message { get; set; }
+        public Breed Message { get; set; }
         public string Status { get; set; }
+    }
+    internal class Breed
+    {
+        public string[] Name { get; set; }
     }
 }
