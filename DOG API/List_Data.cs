@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+
 
 namespace DOG_API
 {
     internal class List_Data
     {
-        public Breed Message { get; set; }
+        public JsonObjectAttribute[] Message { get; set; }
         public string Status { get; set; }
     }
     internal class Breed
     {
-        public string[] Name { get; set; }
+        public object Name { get; set; }
     }
 }

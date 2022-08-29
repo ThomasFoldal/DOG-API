@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Newtonsoft.Json;
 using System.Net;
 using System.IO;
+using System.Collections;
 
 namespace DOG_API
 {
@@ -60,7 +61,7 @@ namespace DOG_API
                 List_Data? data = JsonConvert.DeserializeObject<List_Data>(result);
                 try
                 {
-                    //breed_CB.ItemsSource = data!.Message.Name;
+                    breed_CB.ItemsSource = data!.Message;
                 }
                 catch (Exception)
                 {
