@@ -72,7 +72,13 @@ namespace DOG_API
                 //    }
                 //}
                 //breed_CB.ItemsSource = breeds;
-                JsonRead(result);
+                List<Breed> breeds = JsonRead(result);
+                List<string> breed_list = new List<string>();
+                foreach (Breed b in breeds)
+                {
+                    breed_list.Add(b.breed);
+                }
+                breed_CB.ItemsSource = breed_list;
             }
         }
         private void new_button_Click(object sender, RoutedEventArgs e)
@@ -83,18 +89,21 @@ namespace DOG_API
         }
         public static List<Breed> JsonRead(string input)
         {
-            List<string> split = input.Split('{', '}',StringSplitOptions.TrimEntries).ToList();
-            foreach (string text in split)
+            char[] chars = new char[] { '{', '}' };
+            List<string> split = input.Split(chars,StringSplitOptions.TrimEntries).ToList();
+            for (int i = 0; i < split.Count; i++)
             {
-                if (text.Contains("message") || text.Contains("status"))
+                if (split[i].Contains("message") || split[i].Contains("status"))
                 {
-                    split.Remove(text);
+                    split.RemoveAt(i);
+                    i--;
                 }
             }
-            List<string> breeds = split[0].Split('[', ']',StringSplitOptions.None).ToList();
+            chars = new char[] { '[', ']' };
+            List<string> breeds = split[1].Split(chars,StringSplitOptions.None).ToList();
             Dictionary<string, string> test = new Dictionary<string, string>();
             List<Breed> options = new List<Breed>();
-            for (int i = 0; i < breeds.Count(); i+=2)
+            for (int i = 0; i < breeds.Count()-1; i+=2)
             {
                 test.Add(breeds[i], breeds[i + 1]);
             }

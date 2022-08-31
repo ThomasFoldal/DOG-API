@@ -14,11 +14,23 @@ namespace DOG_API
         public string[] subBreeds;
         public Breed(string _breed)
         {
-            breed = _breed;
+            _breed.Replace(",", string.Empty);
+            breed = _breed.Replace("\"", string.Empty);
+
         }
         public Breed(string _breed, string[] _subBreeds)
         {
+            _breed = _breed.Replace(",", string.Empty);
+            _breed = _breed.Replace(":", string.Empty);
+            _breed = _breed.Replace("\"", string.Empty);
+            _breed = _breed.Replace("\\", string.Empty);
             breed = _breed;
+            for (int i = 0; i < _subBreeds.Count(); i++)
+            {
+                _subBreeds[i] = _subBreeds[i].Replace(",", string.Empty);
+                _subBreeds[i] = _subBreeds[i].Replace("\"", string.Empty);
+                _subBreeds[i] = _subBreeds[i].Replace("\\", string.Empty);
+            }
             subBreeds = _subBreeds;
         }
     }
