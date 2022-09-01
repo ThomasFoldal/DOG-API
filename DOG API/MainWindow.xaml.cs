@@ -24,9 +24,12 @@ namespace DOG_API
     /// </summary>
     public partial class MainWindow : Window
     {
+        internal List<Breed> breeds;
         public MainWindow()
         {
             InitializeComponent();
+
+            // uses the url to to get a random image of a dog and shows it when the program starts
 
             var url = "https://dog.ceo/api/breeds/image/random";
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -48,6 +51,8 @@ namespace DOG_API
                 }
             }
 
+            // Gets a list form the url that contains all the breeds and subbreeds of dogs
+
             url = "https://dog.ceo/api/breeds/list/all";
             httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
@@ -57,35 +62,63 @@ namespace DOG_API
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                //List<string> breeds = new List<string>();
-                //using (var reader = new JsonTextReader(new StringReader(result)))
-                //{
-                //    while (reader.Read())
-                //    {
-                //        if (reader.Value != null)
-                //        {
-                //            if (reader.Value.ToString() != "message" || reader.Value.ToString() != "status" || reader.Value.ToString() != "success")
-                //            {
-                //                breeds.Add(reader.Value.ToString());
-                //            }
-                //        }
-                //    }
-                //}
-                //breed_CB.ItemsSource = breeds;
-                List<Breed> breeds = JsonRead(result);
+                breeds = JsonRead(result); // makes the JSON string into a list of objekts that i can work with
                 List<string> breed_list = new List<string>();
                 foreach (Breed b in breeds)
                 {
                     breed_list.Add(b.breed);
                 }
-                breed_CB.ItemsSource = breed_list;
+                breed_CB.ItemsSource = breed_list; // makes the combobox able to select any of the breeds, but not the subbreeds
             }
         }
         private void new_button_Click(object sender, RoutedEventArgs e)
         {
             var breed = breed_CB.SelectionBoxItem;
-            var url = "https://dog.ceo/api/breeds/" + breed + "/images/random";
+            var subBreed = subBreed_CB.SelectionBoxItem;
+            var url = "";
+            if (breed != "")
+            {
+                if (subBreed != "")
+                {
+                    foreach (Breed b in breeds)
+                    {
+                        if (b.breed == breed)
+                        {
+                            if (b.subBreeds.Count() != 0)
+                            {
+                                subBreed_row.IsEnabled = true;
+                                subBreed_CB.ItemsSource = b.subBreeds;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    url = "https://dog.ceo/api/breed/" + breed + "/images/random";
+                }
+            }
+            else
+            {
+                url = "https://dog.ceo/api/breeds/image/random";
+            }
+            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
 
+            httpRequest.Accept = "application/json";
+
+            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                Img_Data? data = JsonConvert.DeserializeObject<Img_Data>(result);
+                try
+                {
+                    pic_dog.Source = data!.Message;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
         }
         public static List<Breed> JsonRead(string input)
         {
@@ -112,6 +145,11 @@ namespace DOG_API
                 options.Add(new Breed(j.Key, j.Value.Split(',',StringSplitOptions.RemoveEmptyEntries)));
             }
             return options;
+        }
+        private void new_immage(object sender, SelectionChangedEventArgs e)
+        {
+            RoutedEventArgs E = new RoutedEventArgs();
+            new_button_Click(sender, E);
         }
     }
 }

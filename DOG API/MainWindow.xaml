@@ -14,11 +14,13 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Name="subBreed_row" Height="30" IsEnabled="False"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <ComboBox Name="breed_CB" Grid.Column="1" Grid.Row="0" Height="30" VerticalAlignment="Bottom"/>
-        <Image Name="pic_dog" Grid.Column="1" Grid.Row="1" Source="https://dog.ceo/api/breeds/image/random" Stretch="Uniform">
+        <ComboBox Name="breed_CB" Grid.Column="1" Grid.Row="0" Height="30" VerticalAlignment="Bottom" SelectionChanged="new_immage"/>
+        <ComboBox Name="subBreed_CB" Grid.Column="1" Grid.Row="1" />
+        <Image Name="pic_dog" Grid.Column="1" Grid.Row="2" Source="https://dog.ceo/api/breeds/image/random" Stretch="Uniform">
             </Image>
-        <Button Name="new_button" Grid.Column="2" Grid.Row="1" VerticalAlignment="Bottom" Height="30" Content="New Dog" FontWeight="Bold" Click="new_button_Click" />
+        <Button Name="new_button" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom" Height="30" Content="New Dog" FontWeight="Bold" Click="new_button_Click" />
     </Grid>
 </Window>
