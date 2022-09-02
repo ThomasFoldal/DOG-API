@@ -73,28 +73,53 @@ namespace DOG_API
         }
         private void new_button_Click(object sender, RoutedEventArgs e)
         {
-            var breed = breed_CB.SelectionBoxItem;
-            var subBreed = subBreed_CB.SelectionBoxItem;
+            var breed = "";
+            var subBreed = "";
             var url = "";
+            if (sender.Equals(breed_CB))
+            {
+                var breed_cb = sender as ComboBox;
+                breed = breed_cb.SelectedItem.ToString();
+            }
+            else if (sender.Equals(subBreed_CB))
+            {
+                var subBreed_cb = sender as ComboBox;
+                if (subBreed_cb.SelectedItem != null)
+                {
+                    breed = breed_CB.SelectedItem.ToString();
+                    subBreed = subBreed_cb.SelectedItem.ToString();
+                }
+            }
+            else
+            {
+                breed = breed_CB.SelectedItem.ToString();
+                subBreed = subBreed_CB.SelectedItem.ToString();
+            }
             if (breed != "")
             {
                 if (subBreed != "")
                 {
-                    foreach (Breed b in breeds)
-                    {
-                        if (b.breed == breed)
-                        {
-                            if (b.subBreeds.Count() != 0)
-                            {
-                                subBreed_row.IsEnabled = true;
-                                subBreed_CB.ItemsSource = b.subBreeds;
-                            }
-                        }
-                    }
+                    url = "https://dog.ceo/api/breed/" + breed + "/" + subBreed + "/images/random";
                 }
                 else
                 {
                     url = "https://dog.ceo/api/breed/" + breed + "/images/random";
+                }
+                foreach (Breed b in breeds)
+                {
+                    if (b.breed == breed)
+                    {
+                        if (b.subBreeds.Count() != 0)
+                        {
+                            subBreed_CB.IsEnabled = true;
+                            subBreed_CB.ItemsSource = b.subBreeds;
+                        }
+                        else
+                        {
+                            subBreed_CB.IsEnabled = false;
+                            subBreed_CB.ItemsSource = b.subBreeds;
+                        }
+                    }
                 }
             }
             else
