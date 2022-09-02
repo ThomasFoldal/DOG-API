@@ -32,46 +32,12 @@ namespace DOG_API
             // uses the url to to get a random image of a dog and shows it when the program starts
 
             var url = "https://dog.ceo/api/breeds/image/random";
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            httpRequest.Accept = "application/json";
-
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                Img_Data? data = JsonConvert.DeserializeObject<Img_Data>(result);
-                try
-                {
-                pic_dog.Source = data!.Message;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-
-            // Gets a list form the url that contains all the breeds and subbreeds of dogs
+            DisplayImage(url);
 
             url = "https://dog.ceo/api/breeds/list/all";
-            httpRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            httpRequest.Accept = "application/json";
-
-            httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                breeds = JsonRead(result); // makes the JSON string into a list of objekts that i can work with
-                List<string> breed_list = new List<string>();
-                foreach (Breed b in breeds)
-                {
-                    breed_list.Add(b.breed);
-                }
-                breed_CB.ItemsSource = breed_list; // makes the combobox able to select any of the breeds, but not the subbreeds
-            }
+            IncertBreedsIntoComboBox(url);
         }
-        private void new_button_Click(object sender, RoutedEventArgs e)
+        private void NewDogButtonClick(object sender, RoutedEventArgs e)
         {
             var breed = "";
             var subBreed = "";
@@ -79,12 +45,12 @@ namespace DOG_API
             if (sender.Equals(breed_CB))
             {
                 var breed_cb = sender as ComboBox;
-                breed = breed_cb.SelectedItem.ToString();
+                breed = breed_cb!.SelectedItem.ToString();
             }
             else if (sender.Equals(subBreed_CB))
             {
                 var subBreed_cb = sender as ComboBox;
-                if (subBreed_cb.SelectedItem != null)
+                if (subBreed_cb!.SelectedItem != null)
                 {
                     breed = breed_CB.SelectedItem.ToString();
                     subBreed = subBreed_cb.SelectedItem.ToString();
@@ -126,24 +92,7 @@ namespace DOG_API
             {
                 url = "https://dog.ceo/api/breeds/image/random";
             }
-            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            httpRequest.Accept = "application/json";
-
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                Img_Data? data = JsonConvert.DeserializeObject<Img_Data>(result);
-                try
-                {
-                    pic_dog.Source = data!.Message;
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+            DisplayImage(url);
         }
         public static List<Breed> JsonRead(string input)
         {
@@ -171,10 +120,55 @@ namespace DOG_API
             }
             return options;
         }
-        private void new_immage(object sender, SelectionChangedEventArgs e)
+        private void NewImage(object sender, SelectionChangedEventArgs e)
         {
             RoutedEventArgs E = new RoutedEventArgs();
-            new_button_Click(sender, E);
+            NewDogButtonClick(sender, E);
+        }
+        private void DisplayImage(string Url)
+        {
+            var url = Url;
+            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            httpRequest.Accept = "application/json";
+
+            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                Img_Data? data = JsonConvert.DeserializeObject<Img_Data>(result);
+                try
+                {
+                    pic_dog.Source = data!.Message;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+        }
+        public void IncertBreedsIntoComboBox(string Url)
+        {
+            // Gets a list form the url that contains all the breeds and subbreeds of dogs
+            var url = Url;
+            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            httpRequest.Accept = "application/json";
+
+            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = streamReader.ReadToEnd();
+                breeds = JsonRead(result); // makes the JSON string into a list of objekts that i can work with
+                List<string> breed_list = new List<string>();
+                foreach (Breed b in breeds)
+                {
+                    breed_list.Add(b.breed);
+                }
+                breed_CB.ItemsSource = breed_list; // makes the combobox able to select any of the breeds, but not the subbreeds
+            }
+
         }
     }
 }
