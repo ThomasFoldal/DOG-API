@@ -24,7 +24,7 @@ namespace DOG_API
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal List<Breed> breeds;
+        private List<Breed> breeds;
         public MainWindow()
         {
             InitializeComponent();
